@@ -5,7 +5,6 @@ Vagrant.configure(2) do |config|
   rescue LoadError
       # ignore
   end 
-#fix for some stdin: is not a tty annoyance
 
   config.vm.define "puppetmaster" do |puppetmaster|
     puppetmaster.vm.box = "/Users/Mans/Documents/packer/debian-7.8.0-amd64_virtualbox.box"
@@ -21,6 +20,7 @@ Vagrant.configure(2) do |config|
 
     puppetmaster.vm.provision "puppet" do |puppet|
       puppet.module_path = "puppet-local/modules"
+      puppet.manifests_path = "puppet-local/manifests/"
       puppet.manifest_file = "puppetmaster.pp"
     end
 
