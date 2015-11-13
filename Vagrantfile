@@ -17,12 +17,15 @@ Vagrant.configure(2) do |config|
     puppetmaster.vm.network "forwarded_port", guest: 80, host: 8080
     puppetmaster.vm.provision "shell", path: "vagrant-scripts/debian-puppetinstall.sh"
     puppetmaster.vm.provision "shell", path: "vagrant-scripts/debian-puppetmasterinstall.sh"
+    puppetmaster.vm.provision "shell", inline: "puppet module install zack/r10k --modulepath /vagrant/puppet-local/modules"
 
     puppetmaster.vm.provision "puppet" do |puppet|
       puppet.module_path = "puppet-local/modules"
       puppet.manifests_path = "puppet-local/manifests/"
       puppet.manifest_file = "puppetmaster.pp"
     end
+
+    puppetmaster.vm.provision "shell", inline: "r10k deploy environment -p -v"
 
     # puppetmaster.vm.provision "puppet_server" do |puppet|
     #   puppet.options = "--verbose --pluginsync"
